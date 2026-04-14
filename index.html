@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Harish P — Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream: #F5F0E8;
+  --ink: #1A1612;
+  --gold: #B8965A;
+  --gold-light: #D4B483;
+  --gold-pale: #EDD9A3;
+  --muted: #6B6358;
+  --border: #DDD5C8;
+  --surface: #FDFAF5;
+  --accent: #2C4A3E;
+  --accent-light: #3D6B5A;
+  --rust: #8B3A2A;
+  --rust-light: #C05B3F;
+  --slate: #344152;
+  --slate-light: #4A6080;
+  --blush: #C98B8B;
+  --sage: #7A9E7E;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--cream);color:var(--ink);font-family:'DM Sans',sans-serif;font-weight:300;overflow-x:hidden;cursor:none;}
+
+/* ─── NOISE OVERLAY ─── */
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.025;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:150px;}
+
+/* ─── CUSTOM CURSOR ─── */
+#cur-dot{position:fixed;width:8px;height:8px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform .1s,width .3s,height .3s;}
+#cur-ring{position:fixed;width:36px;height:36px;border:1.5px solid var(--gold);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .35s,height .35s,opacity .35s,border-color .35s;opacity:.5;}
+body:has(a:hover,button:hover,.btn:hover,.proj-card:hover,.ach-card:hover,.chip:hover,.hob-item:hover) #cur-ring{width:56px;height:56px;opacity:.9;border-color:var(--gold-light);}
+body:has(a:hover,button:hover,.btn:hover) #cur-dot{width:4px;height:4px;}
+
+/* ─── NAV ─── */
+nav{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:1.4rem 5rem;transition:all .5s cubic-bezier(.22,1,.36,1);}
+nav.scrolled{background:rgba(245,240,232,.93);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:1rem 5rem;}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.7rem;color:var(--ink);text-decoration:none;letter-spacing:.02em;position:relative;overflow:hidden;display:inline-block;}
+.nav-logo .logo-main{display:inline-block;transition:transform .4s cubic-bezier(.22,1,.36,1);}
+.nav-logo .logo-alt{display:inline-block;position:absolute;left:0;top:100%;color:var(--gold);transition:transform .4s cubic-bezier(.22,1,.36,1);}
+.nav-logo:hover .logo-main{transform:translateY(-100%);}
+.nav-logo:hover .logo-alt{transform:translateY(-100%);}
+.nav-links{display:flex;gap:2rem;list-style:none;}
+.nav-links a{font-size:.7rem;font-weight:400;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-decoration:none;position:relative;padding-bottom:2px;}
+.nav-links a::after{content:'';position:absolute;bottom:0;left:0;right:100%;height:1px;background:var(--gold);transition:right .3s cubic-bezier(.22,1,.36,1);}
+.nav-links a:hover::after,.nav-links a.active::after{right:0;}
+.nav-links a:hover,.nav-links a.active{color:var(--ink);}
+.hamburger{display:none;flex-direction:column;gap:6px;cursor:none;z-index:600;padding:4px;}
+.hamburger span{width:26px;height:1px;background:var(--ink);transition:.35s;display:block;transform-origin:center;}
+.hamburger.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px);}
+.hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0);}
+.hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px);}
+
+/* ─── PAGE SYSTEM ─── */
+.page{display:none;min-height:100vh;padding-top:80px;position:relative;}
+.page.active{display:block;}
+
+/* ─── TRANSITION OVERLAY ─── */
+#transition-overlay{position:fixed;inset:0;z-index:400;pointer-events:none;}
+#transition-overlay .bar{position:absolute;top:0;width:12.5%;height:100%;background:var(--ink);transform:scaleY(0);transform-origin:bottom;}
+#transition-overlay.entering .bar{animation:barIn .5s cubic-bezier(.86,0,.07,1) both;}
+#transition-overlay.leaving .bar{animation:barOut .5s cubic-bezier(.86,0,.07,1) both;}
+#transition-overlay .bar:nth-child(1){left:0;animation-delay:0s;}
+#transition-overlay .bar:nth-child(2){left:12.5%;animation-delay:.035s;}
+#transition-overlay .bar:nth-child(3){left:25%;animation-delay:.07s;}
+#transition-overlay .bar:nth-child(4){left:37.5%;animation-delay:.05s;}
+#transition-overlay .bar:nth-child(5){left:50%;animation-delay:.09s;}
+#transition-overlay .bar:nth-child(6){left:62.5%;animation-delay:.04s;}
+#transition-overlay .bar:nth-child(7){left:75%;animation-delay:.08s;}
+#transition-overlay .bar:nth-child(8){left:87.5%;animation-delay:.025s;}
+@keyframes barIn{from{transform:scaleY(0);}to{transform:scaleY(1);}}
+@keyframes barOut{from{transform:scaleY(1);transform-origin:top;}to{transform:scaleY(0);transform-origin:top;}}
+
+/* ─── HOME ─── */
+#page-home{min-height:100vh;display:flex;align-items:center;overflow:hidden;padding:0;}
+.hero-canvas{position:absolute;inset:0;z-index:0;}
+.hero-inner{position:relative;z-index:2;display:grid;grid-template-columns:1fr auto;gap:5rem;align-items:center;max-width:1300px;width:100%;margin:0 auto;padding:0 5rem;}
+
+.eyebrow{font-size:.68rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-bottom:2rem;display:flex;align-items:center;gap:1.2rem;opacity:0;animation:revealUp .9s .3s both;}
+.eyebrow::before{content:'';width:45px;height:1px;background:var(--gold);}
+
+.hero-name{font-family:'Cormorant Garamond',serif;font-size:clamp(4rem,7.5vw,7rem);font-weight:300;line-height:.95;letter-spacing:-.03em;margin-bottom:1.2rem;overflow:hidden;}
+.hero-name-line{display:block;opacity:0;animation:revealUp 1s both;}
+.hero-name-line:nth-child(1){animation-delay:.4s;}
+.hero-name-line:nth-child(2){animation-delay:.55s;color:var(--gold);font-style:italic;}
+.hero-tag{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.35rem;color:var(--muted);margin-bottom:.4rem;line-height:1.6;opacity:0;animation:revealUp .9s .65s both;}
+.hero-tag2{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.1rem;color:var(--muted);margin-bottom:2.5rem;line-height:1.6;opacity:0;animation:revealUp .9s .7s both;}
+.hero-bio{font-size:.88rem;line-height:2;color:var(--muted);max-width:520px;margin-bottom:3rem;border-left:2px solid var(--gold);padding-left:1.5rem;opacity:0;animation:revealUp .9s .85s both;}
+.hero-cta{display:flex;gap:1rem;flex-wrap:wrap;opacity:0;animation:revealUp .9s 1s both;}
+@keyframes revealUp{from{opacity:0;transform:translateY(40px);}to{opacity:1;transform:none;}}
+
+/* ─── MARQUEE STRIP (on home) ─── */
+.home-marquee{position:absolute;bottom:2.5rem;left:0;right:0;overflow:hidden;border-top:1px solid rgba(184,150,90,.2);padding:.6rem 0;opacity:0;animation:revealUp .9s 1.2s both;}
+.home-marquee-track{display:flex;white-space:nowrap;animation:marquee 30s linear infinite;}
+.home-marquee-track span{font-size:.64rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);padding:0 3rem;}
+.home-marquee-track span em{color:var(--gold);font-style:normal;}
+
+/* ─── BUTTONS ─── */
+.btn{display:inline-flex;align-items:center;gap:.6rem;padding:.85rem 2.2rem;font-family:'DM Sans',sans-serif;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;cursor:none;transition:all .35s cubic-bezier(.22,1,.36,1);position:relative;overflow:hidden;}
+.btn::before{content:'';position:absolute;inset:0;transform:translateX(-101%);transition:transform .35s cubic-bezier(.22,1,.36,1);}
+.btn span{position:relative;z-index:1;}
+.btn-fill{background:var(--ink);color:var(--cream);border:1px solid var(--ink);}
+.btn-fill::before{background:var(--accent);}
+.btn-fill:hover::before{transform:translateX(0);}
+.btn-stroke{background:transparent;color:var(--ink);border:1px solid var(--ink);}
+.btn-stroke::before{background:var(--gold-pale);}
+.btn-stroke:hover::before{transform:translateX(0);}
+.btn:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(26,22,18,.15);}
+
+/* ─── HERO RIGHT ─── */
+.hero-right{display:flex;flex-direction:column;gap:2rem;align-items:flex-end;opacity:0;animation:revealLeft 1s .6s both;}
+@keyframes revealLeft{from{opacity:0;transform:translateX(50px);}to{opacity:1;transform:none;}}
+
+.hero-photo-frame{position:relative;width:240px;}
+.hero-photo{width:240px;height:260px;object-fit:cover;object-position:top;display:block;filter:grayscale(20%);transition:filter .5s;}
+.hero-photo:hover{filter:grayscale(0%);}
+.hero-photo-frame::before{content:'';position:absolute;inset:-10px auto auto -10px;width:50px;height:50px;border-top:1px solid var(--gold);border-left:1px solid var(--gold);pointer-events:none;transition:all .4s;}
+.hero-photo-frame::after{content:'';position:absolute;inset:auto -10px -10px auto;width:50px;height:50px;border-bottom:1px solid var(--gold);border-right:1px solid var(--gold);pointer-events:none;transition:all .4s;}
+.hero-photo-frame:hover::before,.hero-photo-frame:hover::after{width:80px;height:80px;}
+
+.hero-stats{background:rgba(253,250,245,.95);border:1px solid var(--border);padding:1.8rem;backdrop-filter:blur(10px);position:relative;width:240px;}
+.hero-stats::before{content:'At a glance';position:relative;top:-10px;left:16px;background:var(--cream);padding:0 8px;font-size:.66rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem;}
+.stat{border-left:2px solid var(--gold);padding-left:.8rem;}
+.stat-n{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;line-height:1;color:var(--ink);}
+.stat-l{font-size:.63rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:.2rem;}
+
+/* ─── SHARED PAGE LAYOUT ─── */
+.page-inner{max-width:1200px;margin:0 auto;padding:5rem 5rem;}
+.sec-label{font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;display:flex;align-items:center;gap:1rem;}
+.sec-label::before{content:'';width:32px;height:1px;background:var(--gold);}
+h2.sec-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.4rem,4.5vw,3.5rem);font-weight:300;line-height:1.1;margin-bottom:.5rem;}
+h2.sec-title em{font-style:italic;color:var(--gold);}
+.sec-sub{font-size:.88rem;color:var(--muted);line-height:1.9;max-width:520px;margin-bottom:4rem;}
+
+/* ─── PAGE HEADER ACCENT BAR ─── */
+.page-accent{height:3px;background:linear-gradient(90deg,var(--gold) 0%,var(--gold-pale) 40%,transparent 100%);position:absolute;top:0;left:0;right:0;}
+
+/* ─── REVEAL ANIMATIONS ─── */
+.reveal{opacity:0;transform:translateY(36px);transition:opacity .8s cubic-bezier(.22,1,.36,1),transform .8s cubic-bezier(.22,1,.36,1);}
+.reveal.r-left{transform:translateX(-36px);}
+.reveal.r-right{transform:translateX(36px);}
+.reveal.visible{opacity:1;transform:none;}
+.d1{transition-delay:.1s;}.d2{transition-delay:.2s;}.d3{transition-delay:.3s;}.d4{transition-delay:.4s;}
+
+/* ─── MARQUEE ─── */
+.marquee-wrap{overflow:hidden;border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:.65rem 0;margin-bottom:5rem;background:var(--surface);}
+.marquee-track{display:flex;white-space:nowrap;animation:marquee 25s linear infinite;}
+.marquee-track span{font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);padding:0 3rem;}
+.marquee-track span em{color:var(--gold);font-style:normal;}
+@keyframes marquee{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+/* ─── EXPERIENCE ─── */
+.exp-layout{display:grid;gap:0;}
+.exp-item{display:grid;grid-template-columns:200px 1fr;gap:4rem;padding:3rem 0;border-bottom:1px solid var(--border);position:relative;transition:background .3s;}
+.exp-item:hover{background:rgba(184,150,90,.025);}
+.exp-item:first-child{padding-top:0;}
+
+/* Colored left accent per card */
+.exp-item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;transform:scaleY(0);transform-origin:top;transition:transform .5s cubic-bezier(.22,1,.36,1);}
+.exp-item:nth-child(1)::before{background:var(--accent);}
+.exp-item:nth-child(2)::before{background:var(--rust);}
+.exp-item:nth-child(3)::before{background:var(--slate);}
+.exp-item:hover::before{transform:scaleY(1);}
+
+.exp-left{padding-top:.3rem;}
+.exp-org-badge{display:inline-block;font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;padding:.3rem .7rem;margin-bottom:.8rem;border:1px solid;transition:background .2s,color .2s;}
+.exp-item:nth-child(1) .exp-org-badge{color:var(--accent);border-color:rgba(44,74,62,.35);}
+.exp-item:nth-child(1):hover .exp-org-badge{background:var(--accent);color:var(--cream);}
+.exp-item:nth-child(2) .exp-org-badge{color:var(--rust);border-color:rgba(139,58,42,.35);}
+.exp-item:nth-child(2):hover .exp-org-badge{background:var(--rust);color:var(--cream);}
+.exp-item:nth-child(3) .exp-org-badge{color:var(--slate);border-color:rgba(52,65,82,.35);}
+.exp-item:nth-child(3):hover .exp-org-badge{background:var(--slate);color:var(--cream);}
+.exp-meta-sm{font-size:.75rem;color:var(--muted);line-height:1.7;}
+.exp-role-title{font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:400;margin-bottom:1rem;line-height:1.2;}
+.exp-pts{list-style:none;}
+.exp-pts li{font-size:.86rem;color:var(--muted);padding:.5rem 0 .5rem 1.5rem;position:relative;line-height:1.75;border-bottom:1px solid rgba(221,213,200,.4);}
+.exp-pts li:last-child{border-bottom:none;}
+.exp-pts li::before{content:'→';position:absolute;left:0;color:var(--gold);font-size:.8rem;top:.55rem;}
+
+/* ─── SKILLS ─── */
+.skill-group{margin-bottom:3.5rem;}
+.skill-group-label{font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.8rem;}
+.skill-group-label::before{content:'';width:20px;height:1px;background:var(--gold);}
+.chips-row{display:flex;flex-wrap:wrap;gap:.8rem;}
+
+.chip{display:flex;flex-direction:column;align-items:center;gap:.5rem;padding:.9rem 1rem;border:1px solid var(--border);background:var(--surface);transition:all .3s cubic-bezier(.22,1,.36,1);min-width:76px;text-align:center;cursor:none;position:relative;overflow:hidden;}
+.chip-inner{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:.5rem;}
+.chip::after{content:'';position:absolute;inset:0;background:var(--ink);transform:scaleY(0);transform-origin:bottom;transition:transform .35s cubic-bezier(.22,1,.36,1);z-index:0;}
+.chip:hover::after{transform:scaleY(1);}
+.chip img{width:28px;height:28px;object-fit:contain;transition:filter .3s;}
+.chip span{font-size:.68rem;color:var(--muted);transition:color .3s;}
+.chip:hover img{filter:brightness(10);}
+.chip:hover span{color:var(--gold-light);}
+.chip:hover{transform:translateY(-5px);border-color:var(--ink);box-shadow:0 10px 28px rgba(26,22,18,.18);}
+
+/* ─── RESEARCH ─── */
+.research-grid{display:grid;gap:1.5rem;}
+.research-card{display:grid;grid-template-columns:auto 1fr;gap:3rem;padding:2.5rem;border:1px solid var(--border);background:var(--surface);position:relative;overflow:hidden;transition:transform .4s cubic-bezier(.22,1,.36,1),box-shadow .4s;}
+.research-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold),var(--gold-pale));transform:scaleX(0);transition:transform .5s cubic-bezier(.22,1,.36,1);}
+.research-card:hover::after{transform:scaleX(1);}
+.research-card:hover{transform:translateY(-4px);box-shadow:0 20px 60px rgba(0,0,0,.09);}
+.research-num{font-family:'Cormorant Garamond',serif;font-size:4rem;font-weight:300;color:rgba(184,150,90,.13);line-height:1;transition:color .3s;min-width:80px;}
+.research-card:hover .research-num{color:rgba(184,150,90,.35);}
+.r-status{font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;margin-bottom:.5rem;display:inline-flex;align-items:center;gap:.5rem;}
+.r-status::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor;}
+.r-status.patented{color:var(--accent);}
+.r-status.completed{color:var(--slate);}
+.r-title{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:400;margin-bottom:.5rem;line-height:1.3;}
+.r-guide{font-size:.76rem;color:var(--muted);margin-bottom:1.2rem;font-style:italic;}
+.r-pts{list-style:none;}
+.r-pts li{font-size:.84rem;color:var(--muted);padding:.3rem 0 .3rem 1.2rem;position:relative;line-height:1.7;}
+.r-pts li::before{content:'◆';position:absolute;left:0;color:var(--gold);font-size:.43rem;top:.6rem;}
+
+/* ─── PROJECTS ─── */
+.proj-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1px;background:var(--border);}
+.proj-card{background:var(--surface);padding:2.5rem;position:relative;overflow:hidden;transition:transform .4s cubic-bezier(.22,1,.36,1);}
+.proj-card::before{content:'';position:absolute;top:0;right:0;width:0;height:0;transition:width .4s cubic-bezier(.22,1,.36,1),height .4s cubic-bezier(.22,1,.36,1);}
+.proj-card:nth-child(1)::before{background:rgba(44,74,62,.05);}
+.proj-card:nth-child(2)::before{background:rgba(139,58,42,.05);}
+.proj-card:nth-child(3)::before{background:rgba(52,65,82,.05);}
+.proj-card:hover::before{width:100%;height:100%;}
+.proj-card:hover{transform:scale(1.02);z-index:2;box-shadow:0 20px 60px rgba(0,0,0,.12);}
+
+.proj-num{font-family:'Cormorant Garamond',serif;font-size:.83rem;color:var(--gold);letter-spacing:.1em;margin-bottom:.8rem;}
+.proj-name{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:400;margin-bottom:1rem;line-height:1.25;}
+.proj-desc{font-size:.82rem;color:var(--muted);line-height:1.85;margin-bottom:1.5rem;}
+.proj-tags{display:flex;flex-wrap:wrap;gap:.5rem;}
+.tag{font-size:.65rem;padding:.3rem .8rem;border:1px solid var(--border);color:var(--muted);letter-spacing:.06em;transition:all .2s;}
+.proj-card:hover .tag{border-color:var(--gold-light);color:var(--gold);}
+.proj-hover-line{position:absolute;bottom:0;left:0;right:0;height:2px;transform:scaleX(0);transition:transform .5s cubic-bezier(.22,1,.36,1);}
+.proj-card:nth-child(1) .proj-hover-line{background:var(--accent);}
+.proj-card:nth-child(2) .proj-hover-line{background:var(--rust);}
+.proj-card:nth-child(3) .proj-hover-line{background:var(--slate);}
+.proj-card:hover .proj-hover-line{transform:scaleX(1);}
+
+/* ─── BOOK PAGE ─── */
+#page-book{background:var(--ink);color:var(--cream);}
+#page-book .sec-label{color:var(--gold-light);}
+#page-book .sec-label::before{background:var(--gold-light);}
+#page-book h2.sec-title{color:var(--cream);}
+#page-book h2.sec-title em{color:var(--gold-light);}
+#page-book .sec-sub{color:rgba(245,240,232,.5);}
+.book-layout{display:grid;grid-template-columns:auto 1fr;gap:6rem;align-items:start;margin-bottom:5rem;}
+.book-cover-wrap{position:relative;}
+.book-cover{width:260px;display:block;border:1px solid rgba(184,150,90,.3);box-shadow:20px 20px 60px rgba(0,0,0,.6),-4px 0 15px rgba(0,0,0,.4);transition:all .5s cubic-bezier(.22,1,.36,1);}
+.book-cover:hover{transform:perspective(800px) rotateY(-10deg) scale(1.04);}
+.book-cover-deco{position:absolute;top:-12px;left:-12px;right:12px;bottom:12px;border:1px solid rgba(184,150,90,.15);pointer-events:none;}
+.book-cover-deco::after{content:'';position:absolute;top:6px;left:6px;right:-6px;bottom:-6px;border:1px solid rgba(184,150,90,.07);}
+.book-title-text{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,4vw,3rem);font-weight:300;font-style:italic;color:var(--gold-light);margin-bottom:.4rem;line-height:1.1;}
+.book-meta{font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(245,240,232,.3);margin-bottom:2rem;}
+.book-desc{font-size:.9rem;line-height:2;color:rgba(245,240,232,.65);margin-bottom:2.5rem;border-left:2px solid var(--gold);padding-left:1.5rem;}
+.book-badge{display:inline-flex;align-items:center;gap:.8rem;border:1px solid rgba(184,150,90,.3);padding:1rem 1.5rem;background:rgba(184,150,90,.05);}
+.book-dot{width:8px;height:8px;border-radius:50%;background:var(--gold);animation:bpulse 1.8s infinite;}
+@keyframes bpulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.3;transform:scale(.5);}}
+.book-badge-txt{font-size:.73rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-light);}
+
+/* Poem */
+.poem-section{margin-top:4rem;}
+.poem-divider{display:flex;align-items:center;gap:2rem;margin-bottom:3rem;}
+.poem-divider::before,.poem-divider::after{content:'';flex:1;height:1px;background:rgba(184,150,90,.18);}
+.poem-divider span{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.4rem;color:var(--gold-light);}
+.poem-text{max-width:600px;margin:auto;padding:3rem;font-family:'Cormorant Garamond',serif;color:var(--cream);line-height:1.85;text-align:center;border:1px solid rgba(184,150,90,.13);position:relative;background:rgba(184,150,90,.03);}
+.poem-corner{position:absolute;width:20px;height:20px;border-color:rgba(184,150,90,.4);}
+.poem-corner.tl{top:10px;left:10px;border-top:1px solid;border-left:1px solid;}
+.poem-corner.tr{top:10px;right:10px;border-top:1px solid;border-right:1px solid;}
+.poem-corner.bl{bottom:10px;left:10px;border-bottom:1px solid;border-left:1px solid;}
+.poem-corner.br{bottom:10px;right:10px;border-bottom:1px solid;border-right:1px solid;}
+.poem-text h3{font-size:1.35rem;font-weight:400;letter-spacing:.08em;margin-bottom:2rem;color:var(--gold-light);}
+.poem-text p{margin-bottom:1.2rem;font-size:1rem;}
+
+/* ─── EDUCATION ─── */
+.edu-track{position:relative;}
+.edu-track::before{content:'';position:absolute;left:150px;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,transparent,var(--border) 5%,var(--border) 95%,transparent);}
+.edu-row{display:grid;grid-template-columns:150px 1fr;gap:3rem;position:relative;}
+.edu-row+.edu-row .edu-content{margin-top:2rem;}
+.edu-year-txt{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--muted);text-align:right;padding-top:.4rem;font-style:italic;}
+.edu-diamond{position:absolute;left:143px;top:10px;width:16px;height:16px;border:1.5px solid var(--gold);background:var(--cream);transform:rotate(45deg);transition:all .35s;}
+.edu-row:hover .edu-diamond{background:var(--gold);transform:rotate(45deg) scale(1.4);}
+
+.edu-content{padding:1.8rem 2rem;border:1px solid var(--border);background:var(--surface);transition:all .35s cubic-bezier(.22,1,.36,1);position:relative;overflow:hidden;}
+.edu-content::before{content:attr(data-year);position:absolute;right:2rem;top:50%;transform:translateY(-50%);font-family:'Cormorant Garamond',serif;font-size:4rem;font-weight:300;color:rgba(184,150,90,.06);pointer-events:none;white-space:nowrap;}
+.edu-content::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform .4s cubic-bezier(.22,1,.36,1);}
+.edu-row:hover .edu-content{transform:translateX(8px);border-color:rgba(184,150,90,.4);}
+.edu-row:hover .edu-content::after{transform:scaleX(1);}
+.edu-deg{font-family:'Cormorant Garamond',serif;font-size:1.35rem;font-weight:400;margin-bottom:.3rem;}
+.edu-inst{font-size:.8rem;color:var(--muted);margin-bottom:.4rem;}
+.edu-grade{font-size:.78rem;color:var(--accent);letter-spacing:.1em;font-weight:500;}
+
+/* ─── ENTRANCES ─── */
+.ent-block{margin-bottom:4rem;}
+.ent-header{display:flex;align-items:baseline;gap:1.5rem;margin-bottom:1rem;flex-wrap:wrap;}
+.ent-block h3{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:400;}
+.ent-badge{display:inline-block;font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;padding:.28rem .7rem;border:1px solid rgba(184,150,90,.4);color:var(--gold);}
+.ent-table{width:100%;border-collapse:collapse;margin-top:.5rem;}
+.ent-table th{font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:.9rem 1.4rem;border-bottom:1px solid var(--border);text-align:left;background:var(--cream);}
+.ent-table td{padding:1rem 1.4rem;border-bottom:1px solid var(--border);font-size:.87rem;background:var(--surface);}
+.ent-table tr:hover td{background:rgba(184,150,90,.03);}
+.score-big{font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:300;color:var(--accent);}
+.sbar-wrap{margin-top:.4rem;}
+.sbar{height:2px;background:var(--border);overflow:hidden;}
+.sbar-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-pale));width:0;transition:width 1.2s cubic-bezier(.22,1,.36,1);}
+
+/* ─── ACHIEVEMENTS ─── */
+.ach-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1.5rem;}
+.ach-card{border:1px solid var(--border);padding:2rem;background:var(--surface);position:relative;overflow:hidden;transition:all .4s cubic-bezier(.22,1,.36,1);}
+
+/* Striped accent per card column */
+.ach-card:nth-child(3n+1){border-top:2px solid var(--gold);}
+.ach-card:nth-child(3n+2){border-top:2px solid var(--accent);}
+.ach-card:nth-child(3n+3){border-top:2px solid var(--slate);}
+
+.ach-card::after{content:'';position:absolute;inset:0;background:rgba(184,150,90,.04);opacity:0;transition:opacity .3s;}
+.ach-card:hover::after{opacity:1;}
+.ach-card:hover{transform:translateY(-6px);box-shadow:0 16px 48px rgba(0,0,0,.1);}
+.ach-yr{font-family:'Cormorant Garamond',serif;font-size:2.5rem;font-weight:300;color:rgba(184,150,90,.18);line-height:1;margin-bottom:.3rem;transition:color .3s;}
+.ach-card:hover .ach-yr{color:rgba(184,150,90,.5);}
+.ach-title{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:400;margin-bottom:.5rem;line-height:1.3;}
+.ach-desc{font-size:.78rem;color:var(--muted);line-height:1.75;}
+
+/* ─── HOBBIES ─── */
+.hob-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1.5rem;}
+.hob-item{padding:2.2rem 1.8rem;text-align:center;background:var(--surface);transition:all .4s cubic-bezier(.22,1,.36,1);cursor:none;position:relative;overflow:hidden;}
+
+/* Different border accents per hobby */
+.hob-item:nth-child(1){border:1px solid var(--border);border-bottom:2px solid var(--rust);}
+.hob-item:nth-child(2){border:1px solid var(--border);border-bottom:2px solid var(--gold);}
+.hob-item:nth-child(3){border:1px solid var(--border);border-bottom:2px solid var(--accent);}
+.hob-item:nth-child(4){border:1px solid var(--border);border-bottom:2px solid var(--slate);}
+.hob-item:nth-child(5){border:1px solid var(--border);border-bottom:2px solid var(--blush);}
+.hob-item:nth-child(6){border:1px solid var(--border);border-bottom:2px solid var(--sage);}
+.hob-item:nth-child(7){border:1px solid var(--border);border-bottom:2px solid var(--rust-light);}
+
+.hob-item::before{content:'';position:absolute;inset:0;background:var(--ink);opacity:0;transform:scaleY(0);transform-origin:bottom;transition:all .45s cubic-bezier(.22,1,.36,1);}
+.hob-item:hover::before{opacity:1;transform:scaleY(1);}
+.hob-item:hover{transform:translateY(-6px);box-shadow:0 16px 40px rgba(0,0,0,.18);}
+.hob-icon{font-size:1.8rem;margin-bottom:.9rem;display:block;transition:transform .4s cubic-bezier(.22,1,.36,1);position:relative;z-index:1;}
+.hob-item:hover .hob-icon{transform:scale(1.35) rotate(-8deg);}
+.hob-name{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:400;margin-bottom:.4rem;position:relative;z-index:1;transition:color .3s;}
+.hob-item:hover .hob-name{color:var(--gold-light);}
+.hob-desc{font-size:.73rem;color:var(--muted);line-height:1.75;position:relative;z-index:1;transition:color .3s;}
+.hob-item:hover .hob-desc{color:rgba(245,240,232,.55);}
+
+/* ─── CONTACT ─── */
+#page-contact{background:var(--ink);color:var(--cream);}
+#page-contact .sec-label{color:var(--gold-light);}
+#page-contact .sec-label::before{background:var(--gold-light);}
+#page-contact h2.sec-title{color:var(--cream);}
+#page-contact h2.sec-title em{color:var(--gold-light);}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:start;}
+.contact-intro{font-size:.93rem;color:rgba(245,240,232,.65);line-height:2;}
+
+/* Contact link strips */
+.contact-links{display:grid;gap:.8rem;margin-top:2rem;}
+.c-link{display:flex;align-items:center;gap:1.2rem;padding:1.1rem 1.5rem;border:1px solid rgba(245,240,232,.08);color:rgba(245,240,232,.75);text-decoration:none;font-size:.83rem;letter-spacing:.04em;transition:all .35s cubic-bezier(.22,1,.36,1);position:relative;overflow:hidden;}
+.c-link::before{content:'';position:absolute;inset:0;background:rgba(184,150,90,.07);transform:translateX(-100%);transition:transform .35s cubic-bezier(.22,1,.36,1);}
+.c-link:hover::before{transform:translateX(0);}
+.c-link:hover{border-color:var(--gold);color:var(--gold-light);transform:translateX(8px);}
+.c-link svg{flex-shrink:0;opacity:.5;transition:opacity .3s;}
+.c-link:hover svg{opacity:1;}
+
+/* Contact big number */
+.contact-ambient{position:absolute;right:5rem;bottom:3rem;font-family:'Cormorant Garamond',serif;font-size:14rem;font-weight:300;color:rgba(184,150,90,.04);line-height:1;pointer-events:none;letter-spacing:-.05em;user-select:none;}
+
+/* ─── FLOATING PAGE NUMBER ─── */
+.page-num{position:fixed;bottom:2rem;right:5rem;font-family:'Cormorant Garamond',serif;font-size:.9rem;font-style:italic;color:var(--muted);z-index:300;letter-spacing:.1em;opacity:.6;transition:opacity .3s;}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:960px){
+  nav{padding:1.1rem 2rem;}
+  nav.scrolled{padding:.9rem 2rem;}
+  .nav-links{display:none;position:absolute;top:100%;left:0;right:0;background:rgba(245,240,232,.97);backdrop-filter:blur(20px);flex-direction:column;padding:1.5rem 2rem;gap:1.2rem;border-bottom:1px solid var(--border);}
+  .nav-links.open{display:flex;}
+  .hamburger{display:flex;}
+  .page-inner{padding:4rem 2rem;}
+  .hero-inner{grid-template-columns:1fr;padding:2rem;gap:2rem;text-align:center;padding-top:5rem;}
+  .hero-right{align-items:center;}
+  .eyebrow{justify-content:center;}
+  .hero-bio{margin:0 auto 2rem;}
+  .hero-cta{justify-content:center;}
+  .exp-item{grid-template-columns:1fr;gap:1rem;}
+  .research-card{grid-template-columns:1fr;gap:1rem;}
+  .book-layout{grid-template-columns:1fr;gap:3rem;}
+  .contact-grid{grid-template-columns:1fr;gap:3rem;}
+  .edu-track::before{display:none;}
+  .edu-row{grid-template-columns:1fr;}
+  .edu-year-txt,.edu-diamond{display:none;}
+  .contact-ambient{display:none;}
+}
+@media(max-width:600px){
+  .hero-name{font-size:3rem;}
+  .ach-grid{grid-template-columns:1fr;}
+  .hob-grid{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+
+<div id="cur-dot"></div>
+<div id="cur-ring"></div>
+
+<div id="transition-overlay">
+  <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+  <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+</div>
+
+<div class="page-num" id="pageNum">01 / Home</div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="nav-logo" onclick="goPage('home');return false;">
+    <span class="logo-main">Harish P</span>
+    <span class="logo-alt">Harish P</span>
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#" onclick="goPage('experience');return false;">Experience</a></li>
+    <li><a href="#" onclick="goPage('skills');return false;">Skills</a></li>
+    <li><a href="#" onclick="goPage('research');return false;">Research</a></li>
+    <li><a href="#" onclick="goPage('projects');return false;">Projects</a></li>
+    <li><a href="#" onclick="goPage('book');return false;">Book</a></li>
+    <li><a href="#" onclick="goPage('education');return false;">Education</a></li>
+    <li><a href="#" onclick="goPage('entrances');return false;">Entrances</a></li>
+    <li><a href="#" onclick="goPage('achievements');return false;">Achievements</a></li>
+    <li><a href="#" onclick="goPage('hobbies');return false;">Hobbies</a></li>
+    <li><a href="#" onclick="goPage('contact');return false;">Contact</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+</nav>
+
+<!-- ══════ HOME ══════ -->
+<div class="page active" id="page-home">
+  <canvas class="hero-canvas" id="heroCanvas"></canvas>
+  <div class="hero-inner">
+    <div class="hero-text">
+      <p class="eyebrow">Portfolio · 2025</p>
+      <h1 class="hero-name">
+        <span class="hero-name-line">Harish P</span>
+      </h1>
+      <p class="hero-tag">VIT Vellore</p>
+      <p class="hero-tag2">Where emotions meet technology and management</p>
+      <p class="hero-bio">A technologist and creative thinker at the intersection of artificial intelligence and literary arts. Crafting models that learn, and verses that breathe — driven by a belief that technology and humanity are not opposites, but collaborators.</p>
+      <div class="hero-cta">
+        <a href="#" class="btn btn-fill" onclick="goPage('projects');return false;"><span>View Projects</span></a>
+        <a href="#" class="btn btn-stroke" onclick="goPage('contact');return false;"><span>Get in Touch</span></a>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-photo-frame">
+        <img src="1.jpeg" alt="Harish P" class="hero-photo" onerror="this.style.background='var(--border)';this.style.height='290px';"/>
+      </div>
+      <div class="hero-stats">
+        <div class="stats-grid">
+          <div class="stat"><div class="stat-n" data-target="23">0</div><div class="stat-l">Age</div></div>
+          <div class="stat"><div class="stat-n" data-target="1">0</div><div class="stat-l">Patent</div></div>
+          <div class="stat"><div class="stat-n" data-target="1">0</div><div class="stat-l">Published Book</div></div>
+          <div class="stat"><div class="stat-n">60+</div><div class="stat-l">Poems</div></div>
+          <div class="stat"><div class="stat-n">9.45</div><div class="stat-l">CGPA</div></div>
+          <div class="stat"><div class="stat-n">7+</div><div class="stat-l">Projects</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="home-marquee">
+    <div class="home-marquee-track">
+      <span><em>AI</em> · Machine Learning</span>
+      <span><em>Poetry</em> · Epitome of Emotions</span>
+      <span><em>Poetry</em> · 60+ Verses</span>
+      <span><em>VIT</em> · CGPA 9.45</span>
+      <span><em>Patent</em> · In AQI Prediction</span>
+      <span><em>AI</em> · Machine Learning</span>
+      <span><em>Poetry</em> · Epitome of Emotions</span>
+      <span><em>Poetry</em> · 60+ Verses</span>
+      <span><em>VIT</em> · CGPA 9.45</span>
+      <span><em>Patent</em> · In AQI Prediction</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ EXPERIENCE ══════ -->
+<div class="page" id="page-experience">
+  <div class="page-accent"></div>
+  <div class="page-inner">
+    <div class="marquee-wrap">
+      <div class="marquee-track">
+        <span><em>TCS</em> · Data Analyst Intern</span>
+        <span><em>VIT</em> · CSED Core Committee</span>
+        <span><em>VIT</em> · Anti-Drug Club Zonal Member</span>
+        <span><em>TCS</em> · Data Analyst Intern</span>
+        <span><em>VIT</em> · CSED Core Committee</span>
+        <span><em>VIT</em> · Anti-Drug Club Zonal Member</span>
+      </div>
+    </div>
+    <p class="sec-label reveal">Professional Journey</p>
+    <h2 class="sec-title reveal">Work <em>Experience</em></h2>
+    <p class="sec-sub reveal">Bridging academic rigour with real-world application across data, machine learning, and community leadership.</p>
+    <div class="exp-layout">
+      <div class="exp-item reveal">
+        <div class="exp-left">
+          <div class="exp-org-badge">TCS</div>
+          <div class="exp-meta-sm">Oct 2023 – Dec 2023<br>Ernakulam, India</div>
+        </div>
+        <div class="exp-right">
+          <h3 class="exp-role-title">Data Analyst Intern</h3>
+          <ul class="exp-pts">
+            <li>Analysed and compared risks across telecom and healthcare sectors.</li>
+            <li>Extracted actionable insights and defined measurable project goals.</li>
+            <li>Applied Python libraries to design, train, and evaluate ML and DL models.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="exp-item reveal d1">
+        <div class="exp-left">
+          <div class="exp-org-badge">CSED · VIT</div>
+          <div class="exp-meta-sm">Dec 2021 – Jan 2023<br>Vellore, India</div>
+        </div>
+        <div class="exp-right">
+          <h3 class="exp-role-title">Core Committee Member</h3>
+          <ul class="exp-pts">
+            <li>Served on the Design and Human Resource teams.</li>
+            <li>Contributed to community-driven social impact initiatives.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="exp-item reveal d2">
+        <div class="exp-left">
+          <div class="exp-org-badge">Anti-Drug Club</div>
+          <div class="exp-meta-sm">Nov 2024 – Apr 2025<br>Vellore, India</div>
+        </div>
+        <div class="exp-right">
+          <h3 class="exp-role-title">Zonal Member</h3>
+          <ul class="exp-pts">
+            <li>Leading Outreach and Research & Development as Zonal Member.</li>
+            <li>Driving awareness campaigns and evidence-based initiatives.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ SKILLS ══════ -->
+<div class="page" id="page-skills">
+  <div class="page-accent"></div>
+  <div class="page-inner">
+    <p class="sec-label reveal">Capabilities</p>
+    <h2 class="sec-title reveal">Skills &amp; <em>Expertise</em></h2>
+    <p class="sec-sub reveal">A versatile technical repertoire spanning programming languages, ML frameworks, developer tools, and creative software.</p>
+    <div class="skill-group reveal">
+      <p class="skill-group-label">Programming Languages</p>
+      <div class="chips-row">
+        <div class="chip"><div class="chip-inner"><img src="p.png" alt="Python"><span>Python</span></div></div>
+        <div class="chip"><div class="chip-inner"><img src="j.png" alt="Java"><span>Java</span></div></div>
+        <div class="chip"><div class="chip-inner"><img src="c.png" alt="C"><span>C</span></div></div>
+        <div class="chip"><div class="chip-inner"><img src="cpp.jpeg" alt="C++"><span>C++</span></div></div>
+        <div class="chip"><div class="chip-inner"><img src="r.jpeg" alt="R"><span>R</span></div></div>
+        <div class="chip"><div class="chip-inner"><img src="my.png" alt="MySQL"><span>MySQL</span></div></div>
+        <div class="chip"><div class="chip-inner"><img src="o.png" alt="OracleSQL"><span>OracleSQL</span></div></div>
+        <div class="chip"><div class="chip-inner"><img src="html.png" alt="HTML"><span>HTML</span></div></div>
+        <div class="chip"><div class="chip-inner"><img src="css.jpeg" alt="CSS"><span>CSS</span></div></div>
+        <div class="chip"><div class="chip-inner"><img src="js.jpeg" alt="JS"><span>JavaScript</span></div></div>
+        <div class="chip"><div class="chip-inner"><img src="php.png" alt="PHP"><span>PHP</span></div></div>
+      </div>
+    </div>
+    <div class="skill-group reveal d1">
+      <p class="skill-group-label">Scientific Libraries</p>
+      <div class="chips-row">
+        <div class="chip"><div class="chip-inner"><img src="n.png" alt="NumPy"><span>NumPy</span></div></div>
+        <div class="chip"><div class="chip-inner"><img src="pan.png" alt="Pandas"><span>Pandas</span></div></div>
+        <div class="chip"><div class="chip-inner"><img src="ten.png" alt="TensorFlow"><span>TensorFlow</span></div></div>
+        <div class="chip"><div class="chip-inner"><img src="sk.png" alt="Scikit"><span>Scikit-Learn</span></div></div>
+        <div class="chip"><div class="chip-inner"><img src="m.png" alt="Matplotlib"><span>Matplotlib</span></div></div>
+        <div class="chip"><div class="chip-inner"><img src="sns.png" alt="Seaborn"><span>Seaborn</span></div></div>
+        <div class="chip"><div class="chip-inner"><img src="py.png" alt="PySpark"><span>PySpark</span></div></div>
+        <div class="chip"><div class="chip-inner"><img src="y.jpeg" alt="YOLO"><span>YOLO</span></div></div>
+      </div>
+    </div>
+    <div class="skill-group reveal d2">
+      <p class="skill-group-label">Software &amp; Tools</p>
+      <div class="chips-row">
+        <div class="chip"><div class="chip-inner"><img src="vs.png" alt="VS Code"><span>VS Code</span></div></div>
+        <div class="chip"><div class="chip-inner"><img src="bi.png" alt="Power BI"><span>Power BI</span></div></div>
+        <div class="chip"><div class="chip-inner"><img src="fi.png" alt="Figma"><span>Figma</span></div></div>
+        <div class="chip"><div class="chip-inner"><img src="can.png" alt="Canva"><span>Canva</span></div></div>
+        <div class="chip"><div class="chip-inner"><img src="ji.jpeg" alt="Jira"><span>Jira</span></div></div>
+        <div class="chip"><div class="chip-inner"><img src="li.png" alt="Linear"><span>Linear</span></div></div>
+        <div class="chip"><div class="chip-inner"><img src="st.jpeg" alt="StarUML"><span>StarUML</span></div></div>
+        <div class="chip"><div class="chip-inner"><img src="g.jpeg" alt="GitHub"><span>GitHub</span></div></div>
+        <div class="chip"><div class="chip-inner"><img src="f.png" alt="Firebase"><span>Firebase</span></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ RESEARCH ══════ -->
+<div class="page" id="page-research">
+  <div class="page-accent"></div>
+  <div class="page-inner">
+    <p class="sec-label reveal">Academic Contributions</p>
+    <h2 class="sec-title reveal">Research <em>Publications</em></h2>
+    <p class="sec-sub reveal">Applying machine learning to real-world problems — from environmental monitoring to financial forecasting.</p>
+    <div class="research-grid">
+      <div class="research-card reveal">
+        <div class="research-num">01</div>
+        <div>
+          <p class="r-status patented">Patented</p>
+          <h3 class="r-title">Predictive Air Quality Analysis</h3>
+          <p class="r-guide">Guide: Dr. Lokesh Kumar R</p>
+          <ul class="r-pts">
+            <li>Collected and preprocessed Air Quality data from the Central Pollution Control Board.</li>
+            <li>Built a hybrid model and optimised XGBoost using Particle Swarm Optimisation and Genetic Algorithms.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="research-card reveal d1">
+        <div class="research-num">02</div>
+        <div>
+          <p class="r-status completed">Completed</p>
+          <h3 class="r-title">Comparative Performance Evaluation of ML Models by Predicting Gold Prices</h3>
+          <ul class="r-pts">
+            <li>Collected and preprocessed gold pricing data from Gold.org.</li>
+            <li>Built machine learning models to analyse decades of time-series data with hyperparameter tuning.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ PROJECTS ══════ -->
+<div class="page" id="page-projects">
+  <div class="page-accent"></div>
+  <div class="page-inner">
+    <p class="sec-label reveal">Technical Work</p>
+    <h2 class="sec-title reveal">Featured <em>Projects</em></h2>
+    <p class="sec-sub reveal">End-to-end machine learning solutions, data pipelines, and interactive applications built with real-world impact in mind.</p>
+    <div class="proj-grid">
+      <div class="proj-card reveal">
+        <p class="proj-num">01 · Sept–Oct 2023</p>
+        <h3 class="proj-name">Business Bankruptcy Prediction</h3>
+        <p class="proj-desc">Designed and deployed a predictive ML model to assess business bankruptcy risk, integrated into a user-friendly web interface using Flask.</p>
+        <div class="proj-tags">
+          <span class="tag">Python</span><span class="tag">Scikit-Learn</span><span class="tag">Flask</span><span class="tag">Matplotlib</span>
+        </div>
+        <div class="proj-hover-line"></div>
+      </div>
+      <div class="proj-card reveal d1">
+        <p class="proj-num">02 · Sept 2023</p>
+        <h3 class="proj-name">Image Classification of Animals</h3>
+        <p class="proj-desc">Implemented a real-time animal image classification pipeline leveraging YOLO architecture for high-accuracy object detection.</p>
+        <div class="proj-tags">
+          <span class="tag">Python</span><span class="tag">YOLO</span><span class="tag">Deep Learning</span>
+        </div>
+        <div class="proj-hover-line"></div>
+      </div>
+      <div class="proj-card reveal d2">
+        <p class="proj-num">03 · July 2025</p>
+        <h3 class="proj-name">Global Superstore Sales Report</h3>
+        <p class="proj-desc">Built an interactive Power BI dashboard by cleaning data, modeling relationships, creating measures, and enabling insights.</p>
+        <div class="proj-tags">
+          <span class="tag">Power BI</span><span class="tag">Data Analysis</span>
+        </div>
+        <div class="proj-hover-line"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ BOOK ══════ -->
+<div class="page" id="page-book">
+  <div class="page-inner">
+    <p class="sec-label reveal">Literary Work</p>
+    <h2 class="sec-title reveal">Published <em>Book</em></h2>
+    <p class="sec-sub reveal">Where code gives way to verse — a journey through the landscape of human emotion.</p>
+    <div class="book-layout reveal">
+      <div class="book-cover-wrap">
+        <img src="eoe.jpeg" alt="Epitome of Emotions" class="book-cover" onerror="this.style.display='none'"/>
+        <div class="book-cover-deco"></div>
+      </div>
+      <div>
+        <h3 class="book-title-text">Epitome of Emotions</h3>
+        <p class="book-meta">A Collection of Poems · 2022</p>
+        <p class="book-desc">A treasure trove of poetic expression, capturing the full spectrum of human emotions. Each poem is an evocative exploration of love, rage, regret, happiness, sadness, glory, and pain. The collection takes readers on a journey through the depths of the human experience — thought-provoking and insightful, delving into the complexities of the human condition with a raw and honest voice.</p>
+        <div class="book-badge">
+          <div class="book-dot"></div>
+          <div class="book-badge-txt">Part II — Coming Soon</div>
+        </div>
+        <p style="margin-top:1rem;font-size:.78rem;color:rgba(245,240,232,.38);line-height:1.8;">The second part of <em style="font-family:'Cormorant Garamond',serif;font-style:italic;color:rgba(184,150,90,.55);">Epitome of Emotions</em> is currently in the making — a continuation of the journey inward.</p>
+      </div>
+    </div>
+    <div class="poem-section reveal">
+      <div class="poem-divider"><span>A Verse from the Collection</span></div>
+      <div class="poem-text">
+        <div class="poem-corner tl"></div>
+        <div class="poem-corner tr"></div>
+        <div class="poem-corner bl"></div>
+        <div class="poem-corner br"></div>
+        <h3>Death in the Hands of…</h3>
+        <p>Death…<br>in the hands of the beloved…</p>
+        <p>The most excruciating scars and pain,<br>just seem to sway...<br>The swain seems to smile despite the strain,<br>as eyes fail to cry.</p>
+        <p>As the sound of the companion dwindle,<br>the heart prays for a chance…<br>Seeing the souls of the beloved crumble,<br>the nature seems to be in a trance.</p>
+        <p>The hands of the companions seem inseparable,<br>as they used to be when at peace….<br>As the eyes close acknowledging the inevitable,<br>the heart refuses flashing the memories.</p>
+        <p>Death…<br>in the hands of the companion…</p>
+        <p>His closing eyes makes effort to console her,<br>as he is preparing for a separate journey…<br>A day without her beloved seems to inflict fear,<br>as she wishes for a miraculous mercy.</p>
+        <p>His hold slowly unwraps itself from her grip,<br>as the time for final goodbye arrives.<br>She with a heavy heart lets a smile slip,<br>For the last time his smile widens.</p>
+        <p>At birth and death being with women,<br>who showered him with boundless love...<br>As his life takes a complete cycle,<br>For the gift he thanks the above.</p>
+        <p>A promise about to be broken,<br>Asking for forgiveness,<br>he breathes his last,<br>as he lies lifeless.</p>
+        <p>Death…<br>in the hands of your love…</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ EDUCATION ══════ -->
+<div class="page" id="page-education">
+  <div class="page-accent"></div>
+  <div class="page-inner">
+    <p class="sec-label reveal">Academic Background</p>
+    <h2 class="sec-title reveal">Education &amp; <em>Formation</em></h2>
+    <p class="sec-sub reveal">A consistent record of academic excellence from secondary school through undergraduate study.</p>
+    <div class="edu-track">
+      <div class="edu-row reveal">
+        <div class="edu-year-txt">2021–2025</div>
+        <div class="edu-diamond"></div>
+        <div class="edu-content" data-year="2025">
+          <h3 class="edu-deg">B.Tech — Computer Science &amp; Engineering &amp; Business Systems</h3>
+          <p class="edu-inst">Vellore Institute of Technology, Vellore</p>
+          <p class="edu-grade">CGPA: 9.45</p>
+        </div>
+      </div>
+      <div class="edu-row reveal d1">
+        <div class="edu-year-txt">2019–2021</div>
+        <div class="edu-diamond"></div>
+        <div class="edu-content" data-year="2021">
+          <h3 class="edu-deg">Senior Secondary Education</h3>
+          <p class="edu-inst">Rajagiri Christu Jayanthi Public School, Ernakulam</p>
+          <p class="edu-grade">97.4%</p>
+        </div>
+      </div>
+      <div class="edu-row reveal d2">
+        <div class="edu-year-txt">2016–2019</div>
+        <div class="edu-diamond"></div>
+        <div class="edu-content" data-year="2019">
+          <h3 class="edu-deg">Secondary Education</h3>
+          <p class="edu-inst">Satchidananda Jothi Nikethan, Kallar</p>
+          <p class="edu-grade">93%</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ ENTRANCES ══════ -->
+<div class="page" id="page-entrances">
+  <div class="page-accent"></div>
+  <div class="page-inner">
+    <p class="sec-label reveal">Competitive Examinations</p>
+    <h2 class="sec-title reveal">Entrance <em>Scores</em></h2>
+    <p class="sec-sub reveal">National-level management and business entrance examination results.</p>
+    <div class="ent-block reveal">
+      <div class="ent-header"><h3>CAT — Common Admission Test</h3><span class="ent-badge">Percentile out of 100</span></div>
+      <table class="ent-table">
+        <thead><tr><th>Attempt</th><th>Overall</th><th>VARC</th><th>DILR</th><th>QA</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Attempt 1</td>
+            <td><span class="score-big">98.95</span><div class="sbar-wrap"><div class="sbar"><div class="sbar-fill" data-pct="98.95"></div></div></div></td>
+            <td>93.4<div class="sbar-wrap"><div class="sbar"><div class="sbar-fill" data-pct="93.4"></div></div></div></td>
+            <td>99.34<div class="sbar-wrap"><div class="sbar"><div class="sbar-fill" data-pct="99.34"></div></div></div></td>
+            <td>97.55<div class="sbar-wrap"><div class="sbar"><div class="sbar-fill" data-pct="97.55"></div></div></div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="ent-block reveal d1">
+      <div class="ent-header"><h3>SNAP — Symbiosis National Aptitude Test</h3><span class="ent-badge">Percentile out of 100</span></div>
+      <table class="ent-table">
+        <thead><tr><th>Attempt</th><th>Overall</th><th>GA (15)</th><th>Analytical (25)</th><th>Verbal (20)</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Attempt 1</td>
+            <td><span class="score-big">99.75</span><div class="sbar-wrap"><div class="sbar"><div class="sbar-fill" data-pct="99.75"></div></div></div></td>
+            <td>12.5<div class="sbar-wrap"><div class="sbar"><div class="sbar-fill" data-pct="83.3"></div></div></div></td>
+            <td>21.25<div class="sbar-wrap"><div class="sbar"><div class="sbar-fill" data-pct="85"></div></div></div></td>
+            <td>18.75<div class="sbar-wrap"><div class="sbar"><div class="sbar-fill" data-pct="93.75"></div></div></div></td>
+          </tr>
+        </tbody>
+      </table>
+      <p style="font-size:.75rem;color:var(--muted);font-style:italic;margin-top:.5rem;">* Section scores shown as marks obtained. Overall is percentile.</p>
+    </div>
+    <div class="ent-block reveal d2">
+      <div class="ent-header"><h3>NMAT — NMIMS Management Aptitude Test</h3><span class="ent-badge">Marks out of 360</span></div>
+      <table class="ent-table">
+        <thead><tr><th>Attempt</th><th>Total</th><th>Language (120)</th><th>Quantitative (120)</th><th>Logical (120)</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Attempt 1</td>
+            <td><span class="score-big">251</span><div class="sbar-wrap"><div class="sbar"><div class="sbar-fill" data-pct="69.7"></div></div></div></td>
+            <td>89<div class="sbar-wrap"><div class="sbar"><div class="sbar-fill" data-pct="74.2"></div></div></div></td>
+            <td>82<div class="sbar-wrap"><div class="sbar"><div class="sbar-fill" data-pct="68.3"></div></div></div></td>
+            <td>80<div class="sbar-wrap"><div class="sbar"><div class="sbar-fill" data-pct="66.7"></div></div></div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ ACHIEVEMENTS ══════ -->
+<div class="page" id="page-achievements">
+  <div class="page-accent"></div>
+  <div class="page-inner">
+    <p class="sec-label reveal">Honours &amp; Recognition</p>
+    <h2 class="sec-title reveal">Achievements &amp; <em>Milestones</em></h2>
+    <p class="sec-sub reveal">A timeline of academic excellence, creative publishing, and competitive distinctions across a decade.</p>
+    <div class="ach-grid">
+      <div class="ach-card reveal"><div class="ach-yr">2025</div><h3 class="ach-title">Sydney International Student Award</h3><p class="ach-desc">Recipient of a Merit-Based Scholarship Offer from the University of Sydney.</p></div>
+      <div class="ach-card reveal d1"><div class="ach-yr">2025</div><h3 class="ach-title">Merit Award</h3><p class="ach-desc">Recognised for outstanding academic performance at VIT.</p></div>
+      <div class="ach-card reveal d2"><div class="ach-yr">2024</div><h3 class="ach-title">Merit Award</h3><p class="ach-desc">Recognised for outstanding academic performance at VIT.</p></div>
+      <div class="ach-card reveal"><div class="ach-yr">2023</div><h3 class="ach-title">Merit Award</h3><p class="ach-desc">Recognised for outstanding academic performance at VIT.</p></div>
+      <div class="ach-card reveal d1"><div class="ach-yr">2023</div><h3 class="ach-title">Smart India Hackathon</h3><p class="ach-desc">Qualified for the 2nd Round at the Smart India Hackathon.</p></div>
+      <div class="ach-card reveal d2"><div class="ach-yr">2023</div><h3 class="ach-title">Epitome of Emotions</h3><p class="ach-desc">Published debut poetry collection, capturing the full spectrum of human emotion.</p></div>
+      <div class="ach-card reveal"><div class="ach-yr">2021</div><h3 class="ach-title">Gold Medal</h3><p class="ach-desc">Awarded Gold Medal for achieving A1 grade in all subjects during Higher Secondary School.</p></div>
+      <div class="ach-card reveal d1"><div class="ach-yr">2019</div><h3 class="ach-title">Gold Medal — Hindi Excellence</h3><p class="ach-desc">Awarded the highest honour in a national-level Hindi examination.</p></div>
+      <div class="ach-card reveal d2"><div class="ach-yr">2019</div><h3 class="ach-title">Runners-Up — Theatre</h3><p class="ach-desc">Runners-up in a district-level theatre competition.</p></div>
+      <div class="ach-card reveal"><div class="ach-yr">2019</div><h3 class="ach-title">Quiz Podium Finishes</h3><p class="ach-desc">Two-time podium finish in district-level quiz competitions.</p></div>
+      <div class="ach-card reveal d1"><div class="ach-yr">2012</div><h3 class="ach-title">National Abacus Champion</h3><p class="ach-desc">First prize in a National Level Abacus Competition.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ HOBBIES ══════ -->
+<div class="page" id="page-hobbies">
+  <div class="page-accent"></div>
+  <div class="page-inner">
+    <p class="sec-label reveal">Beyond the Screen</p>
+    <h2 class="sec-title reveal">Interests &amp; <em>Passions</em></h2>
+    <p class="sec-sub reveal">Life beyond code and verse — a multifaceted pursuer of sport, culture, history, and the mind.</p>
+    <div class="hob-grid">
+      <div class="hob-item reveal"><span class="hob-icon">🏏</span><h3 class="hob-name">Cricket</h3><p class="hob-desc">Pace bowling All-rounder. Played school-level tournaments.</p></div>
+      <div class="hob-item reveal d1"><span class="hob-icon">✍️</span><h3 class="hob-name">Poetry</h3><p class="hob-desc">Over 60 verses penned. Published debut collection, Epitome of Emotions.</p></div>
+      <div class="hob-item reveal d2"><span class="hob-icon">🎙️</span><h3 class="hob-name">Quizzing</h3><p class="hob-desc">Multiple-time finalist in regional quiz competitions in Coimbatore, Tamil Nadu.</p></div>
+      <div class="hob-item reveal"><span class="hob-icon">🪙</span><h3 class="hob-name">Numismatics</h3><p class="hob-desc">Collector of rare Indian and foreign coins from various historical periods.</p></div>
+      <div class="hob-item reveal d1"><span class="hob-icon">📚</span><h3 class="hob-name">Reading</h3><p class="hob-desc">Avid reader of historical fiction and thrillers; keen interest in world literature.</p></div>
+      <div class="hob-item reveal d2"><span class="hob-icon">🎵</span><h3 class="hob-name">Music &amp; Singing</h3><p class="hob-desc">Appreciates music across genres and languages; sings in intimate settings.</p></div>
+      <div class="hob-item reveal"><span class="hob-icon">♟️</span><h3 class="hob-name">Chess</h3><p class="hob-desc">Playing since age 7; over 6,500 games in the last one and a half years.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ CONTACT ══════ -->
+<div class="page" id="page-contact">
+  <div class="page-inner" style="position:relative;">
+    <p class="sec-label reveal">Get in Touch</p>
+    <h2 class="sec-title reveal">Let's <em>Connect</em></h2>
+    <div class="contact-grid">
+      <div class="reveal">
+        <p class="contact-intro">Whether you're interested in collaboration on a machine learning project, curious about the poetry, or simply want to say hello — I'd be glad to hear from you.</p>
+        <p class="contact-intro" style="margin-top:1.2rem;">Open to research partnerships, internship opportunities, and creative collaborations that sit at the intersection of technology and the arts.</p>
+        <div style="margin-top:3rem;padding:2rem;border:1px solid rgba(184,150,90,.2);background:rgba(184,150,90,.04);">
+          <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.3rem;color:var(--gold-light);line-height:1.6;">"Technology and humanity are not opposites — they are collaborators."</p>
+          <p style="font-size:.72rem;color:rgba(245,240,232,.3);margin-top:.8rem;letter-spacing:.1em;text-transform:uppercase;">— Harish P</p>
+        </div>
+      </div>
+      <div class="contact-links reveal d1">
+        <div class="c-link">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>
+          harishpadmanabhan18@gmail.com
+        </div>
+        <a href="https://www.linkedin.com/in/harish-p1803" target="_blank" class="c-link">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          LinkedIn — harish-p1803
+        </a>
+        <a href="https://github.com/Harish18P" target="_blank" class="c-link">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+          GitHub — Harish18P
+        </a>
+      </div>
+    </div>
+    <div class="contact-ambient">HP</div>
+  </div>
+</div>
+
+<script>
+/* ─── CURSOR ─── */
+const dot=document.getElementById('cur-dot'),ring=document.getElementById('cur-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px';});
+(function animC(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animC);})();
+
+/* ─── PAGE SYSTEM ─── */
+let current='home',busy=false;
+const overlay=document.getElementById('transition-overlay');
+const pageLabels={home:'01 / Home',experience:'02 / Experience',skills:'03 / Skills',research:'04 / Research',projects:'05 / Projects',book:'06 / Book',education:'07 / Education',entrances:'08 / Entrances',achievements:'09 / Achievements',hobbies:'10 / Hobbies',contact:'11 / Contact'};
+
+function goPage(id){
+  if(id===current||busy)return;
+  busy=true;
+  overlay.className='entering';
+  setTimeout(()=>{
+    const old=document.getElementById('page-'+current);
+    const next=document.getElementById('page-'+id);
+    old.classList.remove('active');old.style.display='none';
+    current=id;
+    next.style.display='block';
+    window.scrollTo(0,0);
+    setTimeout(()=>{
+      next.classList.add('active');
+      overlay.className='leaving';
+      setTimeout(()=>{overlay.className='';busy=false;},550);
+      updateNavActive(id);
+      triggerReveals(next);
+      if(id==='entrances')setTimeout(animateBars,400);
+      document.getElementById('pageNum').textContent=pageLabels[id]||'';
+    },60);
+  },520);
+}
+
+function updateNavActive(id){
+  document.querySelectorAll('.nav-links a').forEach(a=>{
+    a.classList.remove('active');
+    const oc=a.getAttribute('onclick')||'';
+    if(oc.includes("'"+id+"'"))a.classList.add('active');
+  });
+  document.getElementById('navLinks').classList.remove('open');
+  document.getElementById('hamburger').classList.remove('open');
+}
+
+/* ─── REVEAL ─── */
+function triggerReveals(container){
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});
+  },{threshold:.06});
+  container.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+}
+triggerReveals(document.getElementById('page-home'));
+
+/* ─── HAMBURGER ─── */
+document.getElementById('hamburger').addEventListener('click',function(){
+  this.classList.toggle('open');
+  document.getElementById('navLinks').classList.toggle('open');
+});
+
+/* ─── NAV SCROLL ─── */
+window.addEventListener('scroll',()=>document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>30));
+
+/* ─── SCORE BARS ─── */
+function animateBars(){document.querySelectorAll('.sbar-fill').forEach(b=>{b.style.width=(parseFloat(b.dataset.pct)||0)+'%';});}
+
+/* ─── STAT COUNTERS ─── */
+function animCounters(){
+  document.querySelectorAll('[data-target]').forEach(el=>{
+    const t=parseInt(el.dataset.target);let c=0;
+    const iv=setInterval(()=>{c=Math.min(c+Math.ceil(t/30),t);el.textContent=c;if(c>=t)clearInterval(iv);},40);
+  });
+}
+setTimeout(animCounters,800);
+
+/* ─── HERO CANVAS ─── */
+const canvas=document.getElementById('heroCanvas');
+if(canvas){
+  const ctx=canvas.getContext('2d');
+  const chars=['∑','∫','∂','λ','π','θ','∞','∇','φ','≈','◇','✦','α','β','γ','δ','⌬','⊕','✶','⋮'];
+  let W,H,particles=[];
+  function resize(){W=canvas.width=canvas.offsetWidth;H=canvas.height=canvas.offsetHeight;}
+  class Particle{
+    constructor(){this.reset(true);}
+    reset(init=false){
+      this.x=Math.random()*W;
+      this.y=init?Math.random()*H:H+60;
+      this.char=chars[Math.floor(Math.random()*chars.length)];
+      this.size=Math.random()*55+18;
+      this.speed=Math.random()*.35+.12;
+      this.opacity=Math.random()*.1+.02;
+      this.rot=(Math.random()-.5)*.4;
+      this.angle=Math.random()*Math.PI*2;
+    }
+    draw(){
+      ctx.save();
+      ctx.font=`300 ${this.size}px 'Cormorant Garamond',serif`;
+      ctx.fillStyle=`rgba(184,150,90,${this.opacity})`;
+      ctx.translate(this.x,this.y);
+      ctx.rotate(this.angle);
+      ctx.fillText(this.char,0,0);
+      ctx.restore();
+    }
+    update(){this.y-=this.speed;this.angle+=this.rot*.005;if(this.y<-this.size)this.reset();}
+  }
+  function init(){resize();particles=Array.from({length:20},()=>new Particle());}
+  function loop(){ctx.clearRect(0,0,W,H);particles.forEach(p=>{p.update();p.draw();});requestAnimationFrame(loop);}
+  window.addEventListener('resize',resize);
+  init();loop();
+}
+</script>
+</body>
+</html>
